@@ -31,8 +31,7 @@ bot = telebot.TeleBot(token)
 
 @bot.message_handler(commands=['start'])
 def handle_start(message):
-    cur.execute("INSERT INTO  `telegram`(`id`,`next`, `advertising`,`publick`)  VALUES ('%s',1 ,1,'%s' ) 
-                ON DUPLICATE KEY UPDATE  id = id"%(message.from_user.id,message.text))
+    cur.execute("INSERT INTO  `telegram`(`id`,`next`, `advertising`,`publick`)  VALUES ('%s',1 ,1,'%s' ) ON DUPLICATE KEY UPDATE  id = id"%(message.from_user.id,message.text))
     conn.commit()
     user_markup = telebot.types.ReplyKeyboardMarkup(True, False)
     user_markup.row('/start')
