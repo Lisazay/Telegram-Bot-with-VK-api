@@ -31,7 +31,8 @@ bot = telebot.TeleBot(token)
 
 @bot.message_handler(commands=['start'])
 def handle_start(message):
-    cur.execute("INSERT INTO  `telegram`(`id`,`next`, `advertising`,`publick`)  VALUES ('%s',1 ,1,'%s' ) ON DUPLICATE KEY UPDATE  id = id"%(message.from_user.id,message.text))
+    cur.execute("INSERT INTO  `telegram`(`id`,`next`, `advertising`,`publick`)  VALUES ('%s',1 ,1,'%s' ) 
+                ON DUPLICATE KEY UPDATE  id = id"%(message.from_user.id,message.text))
     conn.commit()
     user_markup = telebot.types.ReplyKeyboardMarkup(True, False)
     user_markup.row('/start')
@@ -99,7 +100,9 @@ def handle_start(message):
         print(pub)      # !!!!!!!!!!!!!! Вывод названия паблика !!!!!!!!!!!!!
     messageID = message.from_user.id
     print(q)
-    x = '\ '[:-1]+ pub            # !!!!!!!!!!!!!!!  ТАК-КАК ПУТЬ К ФАЙЛУ ЧЕРЕЗ СЛЕШ, А В БД СЛЕШ НЕ ЗАНОСИТСЯ, ТО МЫ ДОБОВЛЯЕМ ЕГО ИСКУСТВЕНННО ПРИ ЭТОМ ПРОСТО ДОБАВИТЬ НЕЛЬЗЯЯ ПОТОМУ ЧТО ЭТО БУЛЕТ КАК КОМАНДА '\' ПЕРЕНОС НА СЛЕД СТРОКУ И ИЗ-ЗА ЭТОГО МЫ ДОБОВЛЯЕМ ПРОБЕЛ В СЛЕДСВТИИ ЧЕГО ПОТОМ МЫ ЕГО ПРОСТО ВЫРЕЗАЕМ[1:2]
+    x = '\ '[:-1]+ pub            # !!!!!!!!!!!!!!!  ТАК-КАК ПУТЬ К ФАЙЛУ ЧЕРЕЗ СЛЕШ, А В БД СЛЕШ НЕ ЗАНОСИТСЯ, 
+                                  #ТО МЫ ДОБОВЛЯЕМ ЕГО ИСКУСТВЕНННО ПРИ ЭТОМ ПРОСТО ДОБАВИТЬ НЕЛЬЗЯЯ ПОТОМУ ЧТО Э
+                                  #ТО БУЛЕТ КАК КОМАНДА '\' ПЕРЕНОС НА СЛЕД СТРОКУ И ИЗ-ЗА ЭТОГО МЫ ДОБОВЛЯЕМ ПРОБЕЛ В СЛЕДСВТИИ ЧЕГО ПОТОМ МЫ ЕГО ПРОСТО ВЫРЕЗАЕМ[1:2]
     Q = Pupsen(next, messageID)
     y = str(Q)
     user_markup = telebot.types.ReplyKeyboardMarkup(True, False)
@@ -129,7 +132,8 @@ def handle_start(message):
             print(message.text)
 
 
-        elif message.text.startswith('https://vk.com'):                     # ПРОВЕРЯЕМ НАЧИНАЕТСЯ ЛИ СООБЩЕНИЕ С ССЫЛКИ, ЕСЛИ ДА , ТО ЗАНОСИМ СООБЩНЕИЕ В БАЗУ!!!
+        elif message.text.startswith('https://vk.com'):              # ПРОВЕРЯЕМ НАЧИНАЕТСЯ ЛИ СООБЩЕНИЕ С ССЫЛКИ, 
+                                                                     #ЕСЛИ ДА , ТО ЗАНОСИМ СООБЩНЕИЕ В БАЗУ!!!
 
 
             for v in range(1, 9):
