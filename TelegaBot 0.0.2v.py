@@ -27,7 +27,7 @@ except pymysql.Error as err:
     print("Query error: {}".format(err))
 
 
-token = "token"
+token = "666102825:AAFUWI6m2mJs-i03PdPm7wCfnIsbQuNoUrM"
 bot = telebot.TeleBot(token)
 
 @bot.message_handler(commands=['start'])
