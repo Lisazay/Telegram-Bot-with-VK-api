@@ -6,7 +6,7 @@ import os
 from array import *
 import numpy as np
 import pandas as pd
-
+import os
 try:
     conn = pymysql.connect(host="localhost", user="admin",
                            passwd="123", db="tg")
@@ -20,7 +20,6 @@ except pymysql.Error as err:
 sql = "SELECT * FROM telegram"
 
 
-
 try:
     cur = conn.cursor(pymysql.cursors.DictCursor)
     cur.execute(sql)
@@ -32,18 +31,19 @@ except pymysql.Error as err:
     print("Query error: {}".format(err))
 
 
+session = vk.AuthSession(app_id=os.environ['app_id_vk'], user_login=os.environ['user_login_vk'],
+                         user_password=os.environ['user_pass_vk'])
 
-session = vk.AuthSession(app_id=777, user_login='exemple@yandex.ru',user_password='password')
-
-
+res = cur.execute('SELECT count(*) from telegram') + 1
+print(res)
 vkapi = vk.API(session)
 
-game_over = []
+game_over = []       #  в МАССИВ НАДО ЗАПИХНУТЬ (КОРОТКИЕ) ИМЕНА СООБЩЕСТВ ИЗ БАЗЫ ДАННЫХ
 #
 # cur.execute("SELECT DISTINCT `pub1`, `pub2`, `pub3`, `pub4`, `pub5`, `pub6`, `pub7`, `pub8`  FROM `telegram` WHERE 1 ")
 # data = cur.fetchall()
 # conn.commit()
-
+#
 # for i in range(0, len(data)):
 #     if data[i][0]:
 #         print(data([i][0]))
@@ -58,49 +58,53 @@ game_over = []
 #         conn.commit()
 # print(game_over)
 
-
-#cur.execute(
+#
+# cur.execute(
 #    "SELECT DISTINCT `pub1`, `pub2`, `pub3`, `pub4`, `pub5`, `pub6`, `pub7`, `pub8`  FROM `telegram` ")
-#result_set = cur.fetchall()
-#for row in  result_set:
- #   game_over.append("%s, %s, %s, %s, %s, %s, %s, %s, " % (row['pub1'], row['pub2'], row['pub3'], row['pub4'], row['pub5'],
-  #                                              row['pub6'],row['pub7'], row['pub8'], ))
-#print(game_over)
+# result_set = cur.fetchall()
+# for row in  result_set:
+#    game_over.append("%s, %s, %s, %s, %s, %s, %s, %s, " % (row['pub1'], row['pub2'], row['pub3'], row['pub4'], row['pub5'],
+#                                                row['pub6'],row['pub7'], row['pub8'], ))
+# print(game_over)
 
+publikk = ('pub1', 'pub2','pub3', 'pub4', 'pub5', 'pub6', 'pub7', 'pub8')
 
+cur.execute("SELECT DISTINCT `pub1`, `pub2`, `pub3`, `pub4`, `pub5`, `pub6`, `pub7`, `pub8`  FROM `telegram` ")
+result_set = cur.fetchall()
+for row in result_set:
+    game_over.append(row)
+    # s = "%s" % ((row["pub%s"]) % (row))
+    # k = list(row)
+    # game_over.append(s[k])
+# for rec in range(1):    # !!!!!!!!!!!!!! Вывод название паблика !!!!!!!!!!!!!  # ЭТА СТРОЧКА МОЖЕТ БЫТЬ ПОЛЕЗНА!!!!№№№№№№№№
+#         pub = result_set[1]        # ЭТА СТРОЧКА МОЖЕТ БЫТЬ ПОЛЕЗНА!!!!№№№   # !!!!!!!!!!!!!! Вывод названия паблика !!!!!!!!!!!!!
+#        # print(pub)                         # ЭТА СТРОЧКА МОЖЕТ БЫТЬ ПОЛЕЗНА!!!!№№№№№№№№
+#         game_over.append(pub)             # ЭТА СТРОЧКА МОЖЕТ БЫТЬ ПОЛЕЗНА!!!!№№№№№№№№
+#         conn.commit()                    # ЭТА СТРОЧКА МОЖЕТ БЫТЬ ПОЛЕЗНА!!!!№№№№№№№№
+for row in range(8):
+    for row2 in range(2):
+        print(game_over[row2][publikk[row]])  # Вместо row надо поставить количество строк в базе данных
 
-# cursor.execute("SELECT DISTINCT `pub1`, `pub2`, `pub3`, `pub4`, `pub5`, `pub6`, `pub7`, `pub8`  FROM `telegram` WHERE 1 ")
-# result_set = cursor.fetchall()
-# for row in result_set:
-#     game_over.append(row)
-#     s = "%s" % ((row["pub%s"]) % (row))
-#     k = list(row)
-#     game_over.append(s[k])
-# for rec in q:    # !!!!!!!!!!!!!! Вывод название паблика !!!!!!!!!!!!!
-#         pub = q[rec]                                                              # !!!!!!!!!!!!!! Вывод названия паблика !!!!!!!!!!!!!
-#         print(pub)
-#         game_over.append(pub)
-#         conn.commit()
-
-
+#print(game_over[0]['pub1'])
+#^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 #
 # for rec in q:     #q = cur.fetchone()
 #          pub = q
-#        #  print(pub)
+#          print(pub)
 #          game_over.append(pub)
 
 
-#
+
 # for v in range(1, 9):
 #
 #     cur.execute("SELECT DISTINCT `pub%s` FROM `telegram`   " % v)
 #     q = cur.fetchone()
-#     print(q)
+#     print(q)                                                         #  !!!!!!!!!!!!!!!!!!! ЧЕТ ИНТЕРЕСНОЕ !!!!!!!!!!!
 #     game_over.append(q)
 #     conn.commit()
 #
-# print(game_over[1])
+# print(game_over)
 
 
 # cur.execute(
@@ -113,17 +117,20 @@ game_over = []
 #     pub = q[rec]  # !!!!!!!!!!!!!! Вывод названия паблика !!!!!!!!!!!!!
 #     game_over.append(pub)
 #
-#
+# print(game_over)
 # conn.commit()
 
-#
+
 # cur.execute(
 #         "SELECT DISTINCT `pub1`, `pub2`, `pub3`, `pub4`, `pub5`, `pub6`, `pub7`, `pub8`  FROM `telegram`  ")
 # q = cur.fetchone()  # !!!!!!!!!!!!!! Вывод названия паблика !!!!!!!!!!!!!
 # while q is not None:
 #     game_over.append(q)
-#     q = cur.fetchone()
-# print(game_over)
+#     q = cur.fetchone()                   #  !!!!!!!!!!!!!!!!!!!!!!!! ЧЕТ ИНТЕРЕСНОЕ !!!!!!!!!!!!!!!!!!!!
+#
+# #c = ','.join(a)
+#
+# print(game_over) #Тип данных - список
 
 #
 # cur.execute(
@@ -134,16 +141,28 @@ game_over = []
 #     game_over.append(
 #         "%s, %s, %s, %s, %s, %s, %s, %s, " % (q['pub1'], q['pub2'], q['pub3'], q['pub4'], q['pub5'],
 #                                               q['pub6'], q['pub7'], q['pub8'],))
+#     conn.commit()
 #
 # print(game_over)
 # print(type(game_over))
 
 
+# cur.execute(
+#     "SELECT DISTINCT `pub1`, `pub2`, `pub3`, `pub4`, `pub5`, `pub6`, `pub7`, `pub8`  FROM `telegram` ")
+# q = cur.fetchone()
+# while q is not None:
+#
+#     game_over.append(
+#         "%s, %s, %s, %s, %s, %s, %s, %s, " % (q['pub1'], q['pub2'], q['pub3'], q['pub4'], q['pub5'],
+#                                               q['pub6'], q['pub7'], q['pub8'],))
+# print(game_over[0])
 
-publics = ['MDK','Борщ','Орленок','Пик']    # Названия Групп
+
+
+#publics = ['MDK','Борщ','Орленок','Пик']    # Названия Групп
 
 #link1 = str(input("вставьте ссылку на группу ")[15:])
-
+game_over = ('pikabu', 'myplaystation4')
 
 def groups_id(short_id):
     for item in short_id:
@@ -188,7 +207,7 @@ def groups_id(short_id):
                         counter2 += 1
                         a += 1
                         image_number += 1
-                        print(publics[counter1])
+                       # print(publics[counter1])
                     counter1 += 1
                     # print(publick_id)
                     print(counter1)
@@ -197,10 +216,11 @@ def groups_id(short_id):
     return (-text_group)
 
 
-groups_id(game_over)
+#groups_id(game_over)
 
 
-def comments(publick_id, count, post_id):
+
+def comments(publick_id, count, post_id):   # Выборка комментариев под постом
     getComm = vkapi.wall.getComments(owner_id=-publick_id, count=count, post_id=post_id, v='5.95')
     json_data = json.dumps(getComm)
     parsed_json = json.loads(json_data)

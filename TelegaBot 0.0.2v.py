@@ -3,7 +3,7 @@ import random
 import urllib.request as urllib2
 from telebot import types
 import pymysql
-
+import os
 
 try:
     conn = pymysql.connect(host="localhost", user="admin",
@@ -26,8 +26,7 @@ try:
 except pymysql.Error as err:
     print("Query error: {}".format(err))
 
-
-token = "666102825:AAFUWI6m2mJs-i03PdPm7wCfnIsbQuNoUrM"
+token = os.environ['TOKEN_BOT']
 bot = telebot.TeleBot(token)
 
 @bot.message_handler(commands=['start'])
