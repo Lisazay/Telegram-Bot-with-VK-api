@@ -36,8 +36,8 @@ except pymysql.Error as err:
 session = vk.AuthSession(app_id=os.environ['app_id_vk'], user_login=os.environ['user_login_vk'],
                          user_password=os.environ['user_pass_vk'])
 
-res = cur.execute('SELECT count(*) from telegram') + 1
-print(res)
+cur.execute("SELECT COUNT(*) FROM  `telegram` ")  # Не правильно считает количество строк в БД
+count_str = cur.fetchone()
 vkapi = vk.API(session)
 
 game_over = []       #  в МАССИВ НАДО ЗАПИХНУТЬ (КОРОТКИЕ) ИМЕНА СООБЩЕСТВ ИЗ БАЗЫ ДАННЫХ
@@ -59,7 +59,7 @@ for row in result_set:
 #         game_over.append(pub)             # ЭТА СТРОЧКА МОЖЕТ БЫТЬ ПОЛЕЗНА!!!!№№№№№№№№
 #         conn.commit()                    # ЭТА СТРОЧКА МОЖЕТ БЫТЬ ПОЛЕЗНА!!!!№№№№№№№№
 for row in range(8):
-    for row2 in range(res):
+    for row2 in range(count_str['COUNT(*)']):
         print(game_over[row2][publikk[row]])  # Вместо row надо поставить количество строк в базе данных
         mas_pub.append(game_over[row2][publikk[row]])
 
