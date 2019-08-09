@@ -68,7 +68,7 @@ game_over = []       #  в МАССИВ НАДО ЗАПИХНУТЬ (КОРОТ�
 # print(game_over)
 
 publikk = ('pub1', 'pub2','pub3', 'pub4', 'pub5', 'pub6', 'pub7', 'pub8')
-
+mas_pub = []
 cur.execute("SELECT DISTINCT `pub1`, `pub2`, `pub3`, `pub4`, `pub5`, `pub6`, `pub7`, `pub8`  FROM `telegram` ")
 result_set = cur.fetchall()
 for row in result_set:
@@ -82,9 +82,11 @@ for row in result_set:
 #         game_over.append(pub)             # ЭТА СТРОЧКА МОЖЕТ БЫТЬ ПОЛЕЗНА!!!!№№№№№№№№
 #         conn.commit()                    # ЭТА СТРОЧКА МОЖЕТ БЫТЬ ПОЛЕЗНА!!!!№№№№№№№№
 for row in range(8):
-    for row2 in range(2):
+    for row2 in range(res):
         print(game_over[row2][publikk[row]])  # Вместо row надо поставить количество строк в базе данных
+        mas_pub.append(game_over[row2][publikk[row]])
 
+print(mas_pub)
 #print(game_over[0]['pub1'])
 #^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -166,7 +168,7 @@ game_over = ('pikabu', 'myplaystation4')
 
 def groups_id(short_id):
     for item in short_id:
-            getGroup_id = vkapi.groups.getById(group_ids=item, v='5.95')
+            getGroup_id = vkapi.groups.getById(group_ids=item[15:], v='5.95')
             json_data = json.dumps(getGroup_id)
             parsed_json = json.loads(json_data)
             text_group = parsed_json[0]["id"]
@@ -216,7 +218,7 @@ def groups_id(short_id):
     return (-text_group)
 
 
-#groups_id(game_over)
+groups_id(mas_pub)
 
 
 
