@@ -4,7 +4,6 @@ import urllib.request as urllib2
 from telebot import types
 import pymysql
 import os
-
 try:
     conn = pymysql.connect(host="localhost", user="admin",
                            passwd="123", db="tg")
@@ -102,6 +101,8 @@ def handle_start(message):
     Q = Pupsen(next, messageID)
     y = str(Q)
     user_markup = telebot.types.ReplyKeyboardMarkup(True, False)
+    text_pub = write_text(x,y)
+    bot.send_message(message.from_user.id, text_pub, reply_markup=user_markup)
     url = write_img(x, y)
     urllib2.urlretrieve(url, 'url_image.jpg')
     img = open('url_image.jpg', 'rb')
@@ -124,14 +125,10 @@ def handle_start(message):
         if message.text == '/Добавить Паблик':
             user_markup = telebot.types.ReplyKeyboardMarkup(True, False)
             bot.send_message(message.chat.id, 'Вставь ссылку на группу', reply_markup=user_markup)
-
-
-
             print(message.text)
 
 
         elif message.text.startswith('https://vk.com'):                     # ПРОВЕРЯЕМ НАЧИНАЕТСЯ ЛИ СООБЩЕНИЕ С ССЫЛКИ, ЕСЛИ ДА , ТО ЗАНОСИМ СООБЩНЕИЕ В БАЗУ!!!
-
 
             for v in range(1, 9):
                     cur.execute("SELECT `pub%s` FROM `telegram` WHERE `id` in ('%s')  " % (v, message.from_user.id))
@@ -177,14 +174,23 @@ def handle_start(message):
 
 
 def write_img(x,y):
-        my_file = open('C:\Bablo/' + x +  '\Photo' + y + '.txt')
+        my_file = open('C:\idea/' + x +  '\Photo' + y + '.txt')
         my_string = my_file.read()
         my_file.close()
         print(my_file)
         print('pizdec')
         return (my_string)
 
+def write_text(x,y):
 
+    my_file = open('C:\idea/' + x + '\Text' + y + '.txt', encoding="utf-8")
+    if os.stat('C:\idea/' + x + '\Text' + y + '.txt').st_size == 0:
+        return ("_")
+    my_string_text = my_file.read()
+    my_file.close()
+    print(my_file)
+    print('pizdec')
+    return (my_string_text)
 
 def Pupsen(next,messageID):
         if next <= 20:

@@ -8,7 +8,7 @@ import numpy as np
 import pandas as pd
 import os
 from itertools import groupby
-
+import sys
 try:
     conn = pymysql.connect(host="localhost", user="admin",
                            passwd="123", db="tg")
@@ -32,7 +32,7 @@ try:
 except pymysql.Error as err:
     print("Query error: {}".format(err))
 
-
+print(sys.stdout.encoding)
 session = vk.AuthSession(app_id=os.environ['app_id_vk'], user_login=os.environ['user_login_vk'],
                          user_password=os.environ['user_pass_vk'])
 
@@ -43,7 +43,7 @@ vkapi = vk.API(session)
 game_over = []       #  в МАССИВ НАДО ЗАПИХНУТЬ (КОРОТКИЕ) ИМЕНА СООБЩЕСТВ ИЗ БАЗЫ ДАННЫХ
 mas_pub = []
 
-publikk = ('pub1', 'pub2','pub3', 'pub4', 'pub5', 'pub6', 'pub7', 'pub8')
+publiks = ('pub1', 'pub2','pub3', 'pub4', 'pub5', 'pub6', 'pub7', 'pub8')
 
 
 cur.execute("SELECT DISTINCT `pub1`, `pub2`, `pub3`, `pub4`, `pub5`, `pub6`, `pub7`, `pub8`  FROM `telegram` ")
@@ -58,10 +58,10 @@ for row in result_set:
 #        # print(pub)                         # ЭТА СТРОЧКА МОЖЕТ БЫТЬ ПОЛЕЗНА!!!!№№№№№№№№
 #         game_over.append(pub)             # ЭТА СТРОЧКА МОЖЕТ БЫТЬ ПОЛЕЗНА!!!!№№№№№№№№
 #         conn.commit()                    # ЭТА СТРОЧКА МОЖЕТ БЫТЬ ПОЛЕЗНА!!!!№№№№№№№№
-for row in range(8):
-    for row2 in range(count_str['COUNT(*)']):
-        print(game_over[row2][publikk[row]])  # Вместо row надо поставить количество строк в базе данных
-        mas_pub.append(game_over[row2][publikk[row]])
+for row in range(8):   # 8 потому что пабликов всего 8
+    for row2 in range(count_str['COUNT(*)']):   # количество строк в БД
+        print(game_over[row2][publiks[row]])
+        mas_pub.append(game_over[row2][publiks[row]])
 
 print(mas_pub)
 #print(game_over[0]['pub1'])
@@ -87,7 +87,7 @@ def groups_id(short_id):
             text_group = parsed_json[0]["id"]
             print(-text_group)
 
-            path = "C:/Bablo/{}".format(str(item[15:]))
+            path = "C:/idea/{}".format(str(item[15:]))
 
             try:
                 os.mkdir(path)
@@ -106,18 +106,38 @@ def groups_id(short_id):
                 if counter3 < 1:
                     print()
                     #  print(publick_id )
-                    wallPhoto = vkapi.photos.get(owner_id=-text_group, count=21,
-                                                 album_id='wall', rev='1', photo_sizes=0, v='5.95')
-                    json_data = json.dumps(wallPhoto)
+
+                    wallText = vkapi.wall.get(owner_id=-text_group, count=21, v='5.84')
+                    json_data = json.dumps(wallText)
                     parsed_json = json.loads(json_data)
+
+
+
+                    # wallPhoto = vkapi.photos.get(owner_id=-text_group, count=21,
+                    #                              album_id='wall', rev='1', photo_sizes=0, v='5.95')
+                    # json_data = json.dumps(wallPhoto)
+                    # parsed_json = json.loads(json_data)
                     # print(parsed_json)
+
+
+
                     while counter2 < 21:
                         str_image_number = str(image_number)  # Проебразуем переменную image_number в строку
-                        link = parsed_json["items"][0 + a]["sizes"][3]["url"]  # Получаем ссылку на изображене
-                        print(link)
-                        file = open('C:/Bablo/' + item[15:] + '/Photo' + str_image_number + '.txt',
-                                    'w')  # Открываем/создаем на компьютере в папке текстовые файлы содержащие ссылки на изображения
-                        file.write(link)  # Записываем
+                        link1 = parsed_json["items"][0 + a]["text"]
+
+                        try:
+                            link2 = parsed_json["items"][0 + a]["attachments"][0]["photo"]["sizes"][3]["url"]
+                        except:
+                            print("memememem")
+                        print(link1)
+                        print(link2)
+                        file = open('C:/idea/' + item[15:] + '/Photo' + str_image_number + '.txt',
+                                    'w', encoding="utf-8")  # Открываем/создаем на компьютере в папке текстовые файлы содержащие ссылки на изображения
+                        file.write(link2)  # Записываем
+                        file.close()  # Закрываем файл
+                        file = open('C:/idea/' + item[15:] + '/Text' + str_image_number + '.txt',
+                                    'w', encoding="utf-8")  # Открываем/создаем на компьютере в папке текстовые файлы содержащие ссылки на изображения
+                        file.write(link1)  # Записываем
                         file.close()  # Закрываем файл
                         counter2 += 1
                         a += 1
@@ -126,7 +146,7 @@ def groups_id(short_id):
                     counter1 += 1
                     # print(publick_id)
                     print(counter1)
-            time.sleep(5)
+            time.sleep(10)
 
     return (-text_group)
 
