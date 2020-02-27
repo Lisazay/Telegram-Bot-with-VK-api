@@ -34,7 +34,7 @@ except pymysql.Error as err:
     print("Query error: {}".format(err))
 
 #print(sys.stdout.encoding)
-session = vk.Session('7558823275588232755882322c7538e29477558755882322f1f6e119e3ca9c2dc1dc6da')
+session = vk.Session('75588229dc1dc6da')
 cur.execute("SELECT COUNT(*) FROM  `telegram` ")  # Не правильно считает количество строк в БД см. на строку ниже
 count_str = cur.fetchone()
 colom = count_str['COUNT(*)']  # Теперь норм , главное вычесть 1
