@@ -27,5 +27,5 @@ except pymysql.Error as err:
 cur.execute("CREATE TABLE IF NOT EXISTS telegram ( id INT NOT NULL AUTO_INCREMENT, next TINYINT NOT NULL, advertising TINYINT NOT NULL, PRIMARY KEY (id) , publick VARCHAR(32) NOT NULL DEFAULT '',  pub1 VARCHAR(32) NOT NULL DEFAULT '',"
             "pub2 VARCHAR(32) NOT NULL DEFAULT '',pub3 VARCHAR(32) NOT NULL DEFAULT '',pub4 VARCHAR(32) NOT NULL DEFAULT '',pub5 VARCHAR(32) NOT NULL DEFAULT '',pub6 VARCHAR(32) NOT NULL DEFAULT '',pub7 VARCHAR(32) NOT NULL DEFAULT '',"
             "pub8 VARCHAR(32) NOT NULL DEFAULT '' )")
-conn.close
+conn.close()
 print(data)
